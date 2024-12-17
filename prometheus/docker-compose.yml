@@ -7,13 +7,13 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     ports:
-      - '9090:9090'  # Prometheus UI
+      - '9090:9090'  
     volumes:
-      - ./prometheus:/etc/prometheus  # Mount custom configuration
-      - prom_data:/prometheus  # Persist Prometheus data
+      - ./prometheus:/etc/prometheus  
+      - prom_data:/prometheus  
     restart: unless-stopped
     depends_on:
-      - node_exporter  # Ensure node_exporter is up first
+      - node_exporter  
 
   node_exporter:
     image: quay.io/prometheus/node-exporter:latest
@@ -21,24 +21,24 @@ services:
     command:
       - '--path.rootfs=/host'
     ports:
-      - '9100:9100'  # Node exporter metrics endpoint
+      - '9100:9100'  
     restart: unless-stopped
     volumes:
-      - '/:/host:ro,rslave'  # Expose host file system to node_exporter
+      - '/:/host:ro,rslave'  
 
   grafana:
     image: grafana/grafana
     container_name: grafana
     ports:
-      - '3000:3000'  # Grafana UI
+      - '3000:3000'  
     volumes:
-      - grafana-storage:/var/lib/grafana  # Persist Grafana data
+      - grafana-storage:/var/lib/grafana  
     restart: unless-stopped
     depends_on:
-      - prometheus  # Ensure Prometheus is up first
+      - prometheus  
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin  # Set Grafana admin password
+      - GF_SECURITY_ADMIN_PASSWORD=admin  
 
 volumes:
-  prom_data: {}  # Volume to persist Prometheus data
-  grafana-storage: {}  # Volume to persist Grafana data
+  prom_data: {}  
+  grafana-storage: {}  
